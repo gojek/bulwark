@@ -28,6 +28,7 @@ TAGS
 
 # Java and JVM's Ignores
 /.jvm-*
+pom.xml
 pom.xml.asc
 *.jar
 *.class
