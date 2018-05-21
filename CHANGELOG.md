@@ -1,9 +1,10 @@
 # Bulwark - Changelog
 
-All notable changes to [gojek.tech/bulwark](https://clojars.org/tech.gojek/bulwark) will be documented in this file.
+All notable changes to [tech.gojek/bulwark](https://clojars.org/tech.gojek/bulwark) will be documented in this file.
 
 ## [Unreleased]
 ### Added
+- [tech.gojek/bulwark](./project.clj) Clojure Library
 - FOSS Stepping Stones
 - Initial Commit
 
