@@ -54,7 +54,16 @@
   (let [definition (hystrix-conf key-map)]
     (.execute ^HystrixExecutable (hystrix/instantiate* definition))))
 
+(defn queue-with-hystrix [key-map]
+  (let [definition (hystrix-conf key-map)]
+    (.queue ^HystrixExecutable (hystrix/instantiate* definition))))
+
 (defmacro with-hystrix
   "Executes the given forms within a Hystrix command."
   [key-map & body]
   `(execute-with-hystrix (assoc ~key-map :run-fn (fn [] ~@body))))
+
+(defmacro with-hystrix-queue
+  "Executes the given forms within a Hystrix command."
+  [key-map & body]
+  `(queue-with-hystrix (assoc ~key-map :run-fn (fn [] ~@body))))
