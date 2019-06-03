@@ -8,7 +8,8 @@
   (let [context (MDC/getCopyOfContextMap)]
     (fn [& args]
       (try
-        (MDC/setContextMap context)
+        (when-some context
+          (MDC/setContextMap context))
         (apply f args)
         (finally
           (MDC/clear))))))
