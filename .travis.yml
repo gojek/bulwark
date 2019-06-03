@@ -1,0 +1,27 @@
+language: clojure
+
+stages:
+  - lint-check
+  - test
+  - coverage
+  - name: deploy
+    if: (repo == gojek/bulwark) AND (tag IS present)
+jobs:
+  include:
+  - stage: lint-check
+    script:
+    - lein cljfmt check
+    - lein kibit
+  - stage: test
+    script:
+    - lein clean
+    - lein deps
+    - lein test
+
+  - stage: coverage
+    script:
+    - lein cloverage --output coverage --coveralls
+    - curl --form 'json_file=@coverage/coveralls.json' "${COVERALLS_URL}"
+
+  - stage: deploy
+    script: lein deploy clojars

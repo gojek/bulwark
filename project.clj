@@ -5,6 +5,15 @@
             :url  "https://www.apache.org/licenses/LICENSE-2.0"}
   :repl-options {:host "0.0.0.0"
                  :port 1337}
+  :deploy-repositories [["clojars" {:url           "https://clojars.org/repo"
+                                    :username      :env/clojars_username
+                                    :password      :env/clojars_password
+                                    :sign-releases false}]]
   :dependencies [[com.netflix.hystrix/hystrix-clj "1.5.12"]
                  [org.slf4j/slf4j-api "1.7.25"]]
-  :profiles {:dev {:dependencies [[org.clojure/clojure "1.9.0"]]}})
+  :profiles {:test {:plugins [[lein-cloverage "1.0.13"]]}
+             :dev  {:plugins      [[jonase/eastwood "0.2.6"]
+                                   [lein-cljfmt "0.6.3"]
+                                   [lein-cloverage "1.0.13"]
+                                   [lein-kibit "0.1.6"]]
+                    :dependencies [[org.clojure/clojure "1.9.0"]]}})
