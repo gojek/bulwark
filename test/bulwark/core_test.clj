@@ -3,7 +3,7 @@
             [bulwark.core :as bulwark]))
 
 (deftest with-hystrix-works
-  (testing "Successful call"
+  (testing "Successful call when all configs are supplied"
     (let [fallback (fn [_]
                      "failure")
           result   (bulwark/with-hystrix {:group-key                          "foo"
@@ -12,9 +12,21 @@
                                           :thread-count                       2
                                           :breaker-sleep-window-ms            500
                                           :breaker-error-threshold-percentage 20
+                                          :request-volume-threshold           10
                                           :execution-timeout-ms               100
                                           :fallback-fn                        fallback}
                      "success")]
+      (is (= result "success"))))
+
+  (testing "Successful call when optional configs are not supplied"
+    (let [fallback (fn [_]
+                     "failure")
+          result   (bulwark/with-hystrix {:group-key                          "foo"
+                                          :command-key                        "foo"
+                                          :thread-pool-key                    "foo"
+                                          :thread-count                       2
+                                          :fallback-fn                        fallback}
+                                         "success")]
       (is (= result "success"))))
 
   (testing "Fallback when exception is thrown"
@@ -27,6 +39,7 @@
                                                   :thread-pool-key                    "bar"
                                                   :thread-count                       2
                                                   :breaker-sleep-window-ms            500
+                                                  :request-volume-threshold           20
                                                   :breaker-error-threshold-percentage 20
                                                   :execution-timeout-ms               100
                                                   :fallback-fn                        fallback}
@@ -47,6 +60,7 @@
                                             :thread-count                       2
                                             :breaker-sleep-window-ms            500
                                             :breaker-error-threshold-percentage 20
+                                            :request-volume-threshold           15
                                             :execution-timeout-ms               100
                                             :fallback-fn                        fallback}
                        (Thread/sleep 200)
