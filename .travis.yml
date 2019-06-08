@@ -3,7 +3,8 @@ language: clojure
 stages:
   - lint-check
   - test
-  - coverage
+  - name: coverage
+    if: branch = gojek:master
   - name: deploy
     if: (repo == gojek/bulwark) AND (tag IS present)
 jobs:
