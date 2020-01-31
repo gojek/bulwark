@@ -1,10 +1,8 @@
-(defproject tech.gojek/bulwark "1.0.1"
+(defproject tech.gojek/bulwark "1.1.0"
   :description "Hystrix for Clojurists"
   :url "https://github.com/gojektech/bulwark"
   :license {:name "Apache License, Version 2.0"
             :url  "https://www.apache.org/licenses/LICENSE-2.0"}
-  :repl-options {:host "0.0.0.0"
-                 :port 1337}
   :deploy-repositories [["clojars" {:url           "https://clojars.org/repo"
                                     :username      :env/clojars_username
                                     :password      :env/clojars_password
