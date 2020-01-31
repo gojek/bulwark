@@ -59,15 +59,15 @@
 
   (testing "When an exception is thrown without a fallback"
     (let [exception (catch-and-return
-                      (bulwark/with-hystrix {:group-key                          "bar"
-                                             :command-key                        "bar"
-                                             :thread-pool-key                    "bar"
-                                             :thread-count                       2
-                                             :breaker-sleep-window-ms            500
-                                             :breaker-error-threshold-percentage 20
-                                             :execution-timeout-ms               100}
-                        (throw (ex-info "foo" {:error "foo"}))
-                        "success"))]
+                     (bulwark/with-hystrix {:group-key                          "bar"
+                                            :command-key                        "bar"
+                                            :thread-pool-key                    "bar"
+                                            :thread-count                       2
+                                            :breaker-sleep-window-ms            500
+                                            :breaker-error-threshold-percentage 20
+                                            :execution-timeout-ms               100}
+                       (throw (ex-info "foo" {:error "foo"}))
+                       "success"))]
       (is (= {:error "foo"}
              (-> exception
                  stacktrace/root-cause
@@ -187,15 +187,15 @@
 
   (testing "When body times out without a fallback"
     (let [exception (catch-and-return
-                      @(bulwark/with-hystrix-async {:group-key                          "goo"
-                                                    :command-key                        "goo"
-                                                    :thread-pool-key                    "goo"
-                                                    :thread-count                       2
-                                                    :breaker-sleep-window-ms            500
-                                                    :breaker-error-threshold-percentage 20
-                                                    :execution-timeout-ms               100}
-                         (Thread/sleep 200)
-                         "success"))]
+                     @(bulwark/with-hystrix-async {:group-key                          "goo"
+                                                   :command-key                        "goo"
+                                                   :thread-pool-key                    "goo"
+                                                   :thread-count                       2
+                                                   :breaker-sleep-window-ms            500
+                                                   :breaker-error-threshold-percentage 20
+                                                   :execution-timeout-ms               100}
+                        (Thread/sleep 200)
+                        "success"))]
       (is (instance? HystrixRuntimeException (.getCause exception)))
       (is (re-matches #"goo timed-out.*" (-> exception
                                              (.getCause)

@@ -16,4 +16,5 @@
                                    [lein-cljfmt "0.6.3"]
                                    [lein-cloverage "1.0.13"]
                                    [lein-kibit "0.1.6"]]
-                    :dependencies [[org.clojure/clojure "1.9.0"]]}})
+                    :dependencies [[org.clojure/clojure "1.9.0"]]}}
+  :cljfmt {:indents {bulwark/with-hystrix [[:inner 0]]}})
