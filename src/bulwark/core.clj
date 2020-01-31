@@ -64,7 +64,7 @@
   [key-map & body]
   `(execute-with-hystrix (assoc ~key-map :run-fn (fn [] ~@body))))
 
-(defmacro with-hystrix-queue
-  "Executes the given forms within a Hystrix command."
+(defmacro with-hystrix-async
+  "Executes the given forms asynchronously within a Hystrix command. Returns a future."
   [key-map & body]
   `(queue-with-hystrix (assoc ~key-map :run-fn (fn [] ~@body))))
