@@ -5,6 +5,9 @@ Hystrix for Clojurists [tech.gojek/bulwark](https://clojars.org/tech.gojek/bulwa
 ## Description 
 A light macro to wrap code in a Hystrix command, for circuit-breaking and fault tolerance.
 
+## Usage
+Please see [USAGE.md](USAGE.md).
+
 ## License
 ```
 Copyright 2018, GO-JEK Tech <https://gojek.tech>
