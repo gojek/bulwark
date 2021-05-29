@@ -1,4 +1,4 @@
-(defproject tech.gojek/bulwark "1.1.0"
+(defproject tech.gojek/bulwark "1.1.1"
   :description "Hystrix for Clojurists"
   :url "https://github.com/gojektech/bulwark"
   :license {:name "Apache License, Version 2.0"
