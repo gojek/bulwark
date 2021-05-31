@@ -4,6 +4,10 @@ All notable changes to [tech.gojek/bulwark](https://clojars.org/tech.gojek/bulwa
 
 ## [Unreleased]
 
+## [1.2.0]
+### Added
+- `breaker-request-volume-threshold` config parameter.
+
 ## [1.1.0]
 ### Added
 - `with-hystrix-async` macro to run a Hystrix command asynchronously.
@@ -18,7 +22,8 @@ All notable changes to [tech.gojek/bulwark](https://clojars.org/tech.gojek/bulwa
 - FOSS Stepping Stones
 - Initial Commit
 
-[Unreleased]: https://github.com/gojek/bulwark/compare/v1.1.0...master
+[Unreleased]: https://github.com/gojek/bulwark/compare/v1.2.0...master
+[1.2.0]: https://github.com/gojek/bulwark/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/gojek/bulwark/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/gojek/bulwark/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/gojek/bulwark/compare/10fe6b4e6ab8aad5368c37798c5e0a1a4d499310...v1.0.0
