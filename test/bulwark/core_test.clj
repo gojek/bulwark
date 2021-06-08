@@ -20,6 +20,7 @@
                                           :thread-pool-key                    "foo"
                                           :thread-count                       2
                                           :breaker-sleep-window-ms            500
+                                          :breaker-request-volume-threshold   20
                                           :breaker-error-threshold-percentage 20
                                           :execution-timeout-ms               100
                                           :fallback-fn                        fallback}
@@ -32,6 +33,7 @@
                                         :thread-pool-key                    "foo"
                                         :thread-count                       2
                                         :breaker-sleep-window-ms            500
+                                        :breaker-request-volume-threshold   20
                                         :breaker-error-threshold-percentage 20
                                         :execution-timeout-ms               100}
                    "success")]
@@ -46,6 +48,7 @@
                                           :thread-pool-key                    "bar"
                                           :thread-count                       2
                                           :breaker-sleep-window-ms            500
+                                          :breaker-request-volume-threshold   20
                                           :breaker-error-threshold-percentage 20
                                           :execution-timeout-ms               100
                                           :fallback-fn                        fallback}
@@ -64,6 +67,7 @@
                                             :thread-pool-key                    "bar"
                                             :thread-count                       2
                                             :breaker-sleep-window-ms            500
+                                            :breaker-request-volume-threshold   20
                                             :breaker-error-threshold-percentage 20
                                             :execution-timeout-ms               100}
                        (throw (ex-info "foo" {:error "foo"}))
@@ -82,6 +86,7 @@
                                           :thread-pool-key                    "goo"
                                           :thread-count                       2
                                           :breaker-sleep-window-ms            500
+                                          :breaker-request-volume-threshold   20
                                           :breaker-error-threshold-percentage 20
                                           :execution-timeout-ms               100
                                           :fallback-fn                        fallback}
@@ -98,6 +103,7 @@
                                                  :thread-pool-key                    "goo"
                                                  :thread-count                       2
                                                  :breaker-sleep-window-ms            500
+                                                 :breaker-request-volume-threshold   20
                                                  :breaker-error-threshold-percentage 20
                                                  :execution-timeout-ms               100}
                             (Thread/sleep 200)
@@ -112,6 +118,7 @@
                                                 :thread-pool-key                    "foo"
                                                 :thread-count                       2
                                                 :breaker-sleep-window-ms            500
+                                                :breaker-request-volume-threshold   20
                                                 :breaker-error-threshold-percentage 20
                                                 :execution-timeout-ms               100
                                                 :fallback-fn                        fallback}
@@ -126,6 +133,7 @@
                                               :thread-pool-key                    "foo"
                                               :thread-count                       2
                                               :breaker-sleep-window-ms            500
+                                              :breaker-request-volume-threshold   20
                                               :breaker-error-threshold-percentage 20
                                               :execution-timeout-ms               100}
                    {:status "success" :response "success"})]
@@ -140,6 +148,7 @@
                                                 :thread-pool-key                    "bar"
                                                 :thread-count                       2
                                                 :breaker-sleep-window-ms            500
+                                                :breaker-request-volume-threshold   20
                                                 :breaker-error-threshold-percentage 20
                                                 :execution-timeout-ms               100
                                                 :fallback-fn                        fallback}
@@ -156,6 +165,7 @@
                                                        :thread-pool-key                    "bar"
                                                        :thread-count                       2
                                                        :breaker-sleep-window-ms            500
+                                                       :breaker-request-volume-threshold   20
                                                        :breaker-error-threshold-percentage 20
                                                        :execution-timeout-ms               100}
                             (throw (ex-info "foo" {:error "foo"}))
@@ -176,6 +186,7 @@
                                                 :thread-pool-key                    "goo"
                                                 :thread-count                       2
                                                 :breaker-sleep-window-ms            500
+                                                :breaker-request-volume-threshold   20
                                                 :breaker-error-threshold-percentage 20
                                                 :execution-timeout-ms               100
                                                 :fallback-fn                        fallback}
@@ -192,6 +203,7 @@
                                                    :thread-pool-key                    "goo"
                                                    :thread-count                       2
                                                    :breaker-sleep-window-ms            500
+                                                   :breaker-request-volume-threshold   20
                                                    :breaker-error-threshold-percentage 20
                                                    :execution-timeout-ms               100}
                         (Thread/sleep 200)

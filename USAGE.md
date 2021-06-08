@@ -25,6 +25,7 @@ in a Hystrix command. A similar macro `with-hystrix-async` is available that exe
                      
                        :thread-count                       2
                        :breaker-sleep-window-ms            500
+                       :breaker-request-volume-threshold   200
                        :breaker-error-threshold-percentage 20
                        :execution-timeout-ms               100}
   "success")
@@ -46,6 +47,7 @@ in a Hystrix command. A similar macro `with-hystrix-async` is available that exe
                          :thread-pool-key                    "foo-thread-pool"
                          :thread-count                       2
                          :breaker-sleep-window-ms            500
+                         :breaker-request-volume-threshold   200
                          :breaker-error-threshold-percentage 20
                          :execution-timeout-ms               100
                          :fallback-fn                        fallback}
@@ -75,6 +77,7 @@ in a Hystrix command. A similar macro `with-hystrix-async` is available that exe
                                 
                                 :thread-count                       2
                                 :breaker-sleep-window-ms            500
+                                :breaker-request-volume-threshold   200
                                 :breaker-error-threshold-percentage 20
                                 :execution-timeout-ms               100
                                 :fallback-fn                        fallback}

@@ -16,6 +16,7 @@
 
 (defn- init-fn [{:keys [thread-count
                         breaker-sleep-window-ms
+                        breaker-request-volume-threshold
                         breaker-error-threshold-percentage
                         execution-timeout-ms]}]
   (fn [_ ^HystrixCommand$Setter setter]
@@ -23,6 +24,7 @@
         (.andCommandPropertiesDefaults
          (-> (HystrixCommandProperties/Setter)
              (.withCircuitBreakerSleepWindowInMilliseconds breaker-sleep-window-ms)
+             (.withCircuitBreakerRequestVolumeThreshold breaker-request-volume-threshold)
              (.withCircuitBreakerErrorThresholdPercentage breaker-error-threshold-percentage)
              (.withExecutionTimeoutInMilliseconds execution-timeout-ms)))
         (.andThreadPoolPropertiesDefaults
@@ -46,6 +48,7 @@
            :thread-pool-key (hystrix/thread-pool-key (or thread-pool-key group-key))
            :init-fn         (init-fn (select-keys config [:thread-count
                                                           :breaker-sleep-window-ms
+                                                          :breaker-request-volume-threshold
                                                           :breaker-error-threshold-percentage
                                                           :execution-timeout-ms]))
            :run-fn          (capture-logging-context run-fn)}
