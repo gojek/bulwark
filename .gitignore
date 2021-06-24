@@ -46,6 +46,7 @@ pom.xml.asc
 /.nrepl-*
 /out
 /output
+/coverage
 
 # Project's Ignores
 test/user.clj
