@@ -2,7 +2,8 @@
   (:require [clojure.test :refer :all]
             [bulwark.core :as bulwark]
             [clojure.stacktrace :as stacktrace])
-  (:import (com.netflix.hystrix.exception HystrixRuntimeException)))
+  (:import (com.netflix.hystrix.exception HystrixRuntimeException)
+           (org.slf4j MDC)))
 
 (defmacro catch-and-return
   [& body]
@@ -212,3 +213,32 @@
       (is (re-matches #"goo timed-out.*" (-> exception
                                              (.getCause)
                                              (.getMessage)))))))
+
+(deftest test-fallback-function
+  (testing "should not clear MDC if running on same thread"
+    (MDC/clear)
+    (MDC/setContextMap {"a" "1"})
+    (is (= "1" (MDC/get "a")))
+    (let [main-thread (.getName (Thread/currentThread))
+          fallback-fn (bulwark/capture-logging-context
+                        (fn [] (let [fallback-thread (.getName (Thread/currentThread))]
+                                 (is (= main-thread fallback-thread)))))]
+      (fallback-fn))
+    (is (= "1" (MDC/get "a"))))
+
+  (testing "should clear MDC if fallback is running on different thread"
+    (MDC/clear)
+    (MDC/setContextMap {"a" "1"})
+    (dotimes [i 10])
+    (is (= "1" (MDC/get "a")))
+    (let [main-thread (.getName (Thread/currentThread))
+          fallback-fn (bulwark/capture-logging-context
+                        (fn [] (let [fallback-thread (.getName (Thread/currentThread))]
+                                 (is (not= main-thread fallback-thread)))))]
+      (->
+        (proxy [Thread] [] (run []
+                             (fallback-fn)
+                             (is (nil? (MDC/get "a")))))
+        (.start))))
+  (Thread/sleep 300)
+  (is (= "1" (MDC/get "a"))))

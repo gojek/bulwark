@@ -4,15 +4,19 @@
                                 HystrixThreadPoolProperties HystrixExecutable)
            (org.slf4j MDC)))
 
-(defn- capture-logging-context [f]
-  (let [context (MDC/getCopyOfContextMap)]
+(defn capture-logging-context [f]
+  (let [context (MDC/getCopyOfContextMap)
+        parent-thread-id (.getId (Thread/currentThread))]
     (fn [& args]
-      (try
-        (when context
-          (MDC/setContextMap context))
-        (apply f args)
-        (finally
-          (MDC/clear))))))
+      (let [child-thread-id (.getId (Thread/currentThread))
+            is-different-thread? (not= parent-thread-id child-thread-id)]
+        (try
+          (when (and is-different-thread? context)
+            (MDC/setContextMap context))
+          (apply f args)
+          (finally
+            (when is-different-thread?
+              (MDC/clear))))))))
 
 (defn- init-fn [{:keys [thread-count
                         breaker-sleep-window-ms
