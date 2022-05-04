@@ -4,6 +4,10 @@ All notable changes to [tech.gojek/bulwark](https://clojars.org/tech.gojek/bulwa
 
 ## [Unreleased]
 
+## [1.2.1]
+### Added
+- check if fallback func is running in separate thread before clearing MDC
+
 ## [1.2.0]
 ### Added
 - `breaker-request-volume-threshold` config parameter.
