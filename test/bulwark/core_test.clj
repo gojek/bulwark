@@ -182,43 +182,47 @@
     (let [fallback (fn [{:keys [response-timed-out?]}]
                      {:status              "failure"
                       :response-timed-out? response-timed-out?})
-          result   (bulwark/with-hystrix-async {:group-key                          "goo"
-                                                :command-key                        "goo"
-                                                :thread-pool-key                    "goo"
-                                                :thread-count                       2
-                                                :breaker-sleep-window-ms            500
-                                                :breaker-request-volume-threshold   20
-                                                :breaker-error-threshold-percentage 20
-                                                :execution-timeout-ms               100
-                                                :fallback-fn                        fallback}
-                     (Thread/sleep 200)
-                     "success")]
+          result (bulwark/with-hystrix-async {:group-key                          "goo"
+                                              :command-key                        "goo"
+                                              :thread-pool-key                    "goo"
+                                              :thread-count                       2
+                                              :breaker-sleep-window-ms            500
+                                              :breaker-request-volume-threshold   20
+                                              :breaker-error-threshold-percentage 20
+                                              :execution-timeout-ms               100
+                                              :fallback-fn                        fallback}
+                                             (Thread/sleep 200)
+                                             "success")]
       (is (= {:status              "failure"
               :response-timed-out? true}
              @result))))
 
   (testing "When body times out without a fallback"
     (let [exception (catch-and-return
-                     @(bulwark/with-hystrix-async {:group-key                          "goo"
-                                                   :command-key                        "goo"
-                                                   :thread-pool-key                    "goo"
-                                                   :thread-count                       2
-                                                   :breaker-sleep-window-ms            500
-                                                   :breaker-request-volume-threshold   20
-                                                   :breaker-error-threshold-percentage 20
-                                                   :execution-timeout-ms               100}
-                        (Thread/sleep 200)
-                        "success"))]
+                      @(bulwark/with-hystrix-async {:group-key                          "goo"
+                                                    :command-key                        "goo"
+                                                    :thread-pool-key                    "goo"
+                                                    :thread-count                       2
+                                                    :breaker-sleep-window-ms            500
+                                                    :breaker-request-volume-threshold   20
+                                                    :breaker-error-threshold-percentage 20
+                                                    :execution-timeout-ms               100}
+                                                   (Thread/sleep 200)
+                                                   "success"))]
       (is (instance? HystrixRuntimeException (.getCause exception)))
       (is (re-matches #"goo timed-out.*" (-> exception
                                              (.getCause)
                                              (.getMessage)))))))
 
+(defn with-mdc [f]
+  (MDC/setContextMap {"a" "1"})
+  (is (= "1" (MDC/get "a")))
+  (try (f) (finally (MDC/clear))))
+
+(use-fixtures :once with-mdc)
+
 (deftest test-fallback-function
   (testing "should not clear MDC if running on same thread"
-    (MDC/clear)
-    (MDC/setContextMap {"a" "1"})
-    (is (= "1" (MDC/get "a")))
     (let [main-thread (.getName (Thread/currentThread))
           fallback-fn (bulwark/capture-logging-context
                         (fn [] (let [fallback-thread (.getName (Thread/currentThread))]
@@ -227,18 +231,14 @@
     (is (= "1" (MDC/get "a"))))
 
   (testing "should clear MDC if fallback is running on different thread"
-    (MDC/clear)
-    (MDC/setContextMap {"a" "1"})
-    (dotimes [i 10])
-    (is (= "1" (MDC/get "a")))
     (let [main-thread (.getName (Thread/currentThread))
           fallback-fn (bulwark/capture-logging-context
                         (fn [] (let [fallback-thread (.getName (Thread/currentThread))]
-                                 (is (not= main-thread fallback-thread)))))]
-      (->
-        (proxy [Thread] [] (run []
-                             (fallback-fn)
-                             (is (nil? (MDC/get "a")))))
-        (.start))))
-  (Thread/sleep 300)
+                                 (is (not= main-thread fallback-thread)))))
+          agnt (agent {})]
+      (send-off agnt (fn [state]
+                       (fallback-fn)
+                       (is (nil? (MDC/get "a")))
+                       (assoc state :done true)))
+      (await agnt)))
   (is (= "1" (MDC/get "a"))))

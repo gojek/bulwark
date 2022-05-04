@@ -15,5 +15,5 @@
                                    [lein-cloverage "1.0.13"]
                                    [lein-kibit "0.1.6"]]
                     :dependencies [[org.clojure/clojure "1.9.0"]
-                                   [org.apache.logging.log4j/log4j-slf4j-impl "2.1"]]}}
+                                   [org.apache.logging.log4j/log4j-slf4j-impl "2.17.2"]]}}
   :cljfmt {:indents {bulwark/with-hystrix [[:inner 0]]}})
